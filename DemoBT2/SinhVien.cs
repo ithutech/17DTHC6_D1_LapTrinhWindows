@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dthc6d1LapTrinhWins
+namespace DemoBT2
 {
-    class SinhVien : IComparable
+    class SinhVien : Nguoi
     {
         private int ma;
         private float diem;
@@ -18,7 +18,7 @@ namespace Dthc6d1LapTrinhWins
 
         public SinhVien()
         {
-            
+
         }
 
         public SinhVien(int ma, string khoa, float diem)
@@ -28,28 +28,25 @@ namespace Dthc6d1LapTrinhWins
             this.diem = diem;
         }
 
-        internal void Nhap()
+        internal override void Nhap()
         {
+
             //Nhap thong tin sinh vien
             Console.Write("Ma = ");
             this.ma = int.Parse(Console.ReadLine());
+            base.Nhap();
             Console.Write("Khoa = ");
             this.khoa = Console.ReadLine();
             Console.Write("Diem = ");
             this.diem = float.Parse(Console.ReadLine());
         }
 
-        internal void Xuat()
+        internal override void Xuat()
         {
             Console.WriteLine("Ma = {0}", this.ma);
+            base.Xuat();
             Console.WriteLine("Khoa = {0}", this.khoa);
             Console.WriteLine("Diem = {0}", this.diem);
-        }
-
-        public int CompareTo(object obj)
-        {
-            int iCompare = Convert.ToInt32(this.diem - (obj as SinhVien).diem);
-            return iCompare;
         }
     }
 }
