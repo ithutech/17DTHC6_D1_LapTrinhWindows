@@ -16,7 +16,7 @@ namespace LapTrinhTrenGiaoDien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMuaVeXemPhimOnline());
+            Application.Run(new frmMain());
         }
     }
 }

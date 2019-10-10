@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LapTrinhTrenGiaoDien.Entities
 {
-    class Ghe
+    public class Ghe
     {
         public int GheID { get; set; }
         public int HangGheID { get; set; }

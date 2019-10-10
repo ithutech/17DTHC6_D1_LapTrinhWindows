@@ -15,9 +15,7 @@ namespace LapTrinhTrenGiaoDien
     {
         DatVeOnlineContext dbContext;
         List<Button> dsChon;
-        List<string> gheHangDau = new List<string> { "1", "2", "3", "4", "5" };
-        List<string> gheHangHai = new List<string> { "6", "7", "8", "9", "10" };
-        List<string> gheHangBa = new List<string> { "11", "12", "13", "14", "15" };
+        List<KhachHang> dsKhachHang;
         public frmMuaVeXemPhimOnline()
         {
             InitializeComponent();
@@ -71,7 +69,7 @@ namespace LapTrinhTrenGiaoDien
         {
             //B1. Them Khach hang
             KhachHang khachHang = new KhachHang();
-            khachHang.TenKhachHang = txtKhachHang.Text;
+            khachHang.TenKhachHang = cbxKhachHang.Text;
             dbContext.KhachHangs.Add(khachHang);
             dbContext.SaveChanges();
             //B2. Luu Hoa Don
@@ -93,32 +91,68 @@ namespace LapTrinhTrenGiaoDien
                 ve.BackColor = Color.Yellow;
             }
             dbContext.SaveChanges();
-            txtKhachHang.Text = "";
+            cbxKhachHang.Text = "";
             txtTien.Text = "";
 
         }
 
         private void CaiDatManHinh()
         {
-            Button old = new Button() { Width = 0, Location = new Point(30, 50) };
-            int rong = 50, dai = 50;
-            for (int i = 0; i < 3; i++)
+            //B1. Lay danh sach tat ca hoa don tu DB
+            List<string> dsSoGheChiTietHoaDon = dbContext.ChiTietHoaDons.Include("Ghe").Select(x => x.Ghe.SoGhe.ToString()).ToList();
+            //B2. Kiem tra Ghe trong ung dung co ton tai chi tiet hay khong?
+            //Neu ton tai thi ve da duoc ban
+            foreach (Button ghe in this.Controls.OfType<Button>())
             {
-                for (int j = 0; j < 5; j++)
+                if (dsSoGheChiTietHoaDon.Contains(ghe.Text))
                 {
-                    Button btn = new Button()
-                    {
-                        Width = rong,
-                        Height = dai,
-                        Location = new Point(old.Location.X + rong, old.Location.Y)
-                    };
-                    this.Controls.Add(btn);
-                    old = btn;
+                    ghe.BackColor = Color.Yellow;
                 }
-                old.Location = new Point(0, old.Location.Y + dai);
-                old.Width = 0;
-                old.Height = 0;
             }
+            //lay danh sach khach hang
+            RefreshKhachHang();
+
+            //Button old = new Button() { Width = 0, Location = new Point(30, 50) };
+            //int rong = 50, dai = 50;
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    for (int j = 0; j < 5; j++)
+            //    {
+            //        Button btn = new Button()
+            //        {
+            //            Width = rong,
+            //            Height = dai,
+            //            Location = new Point(old.Location.X + rong, old.Location.Y)
+            //        };
+            //        this.Controls.Add(btn);
+            //        old = btn;
+            //    }
+            //    old.Location = new Point(0, old.Location.Y + dai);
+            //    old.Width = 0;
+            //    old.Height = 0;
+            //}
+        }
+
+        private void Button16_Click(object sender, EventArgs e)
+        {
+            //form khach hang nhap thong tin
+            frmKHachHang frm = new frmKHachHang();
+            frm.luuThongTinKhachHang += Frm_luuThongTinKhachHang;
+            frm.ShowDialog();
+        }
+
+        private void Frm_luuThongTinKhachHang(object sender, Utils.EventLuuThongTinKhachHang e)
+        {
+            RefreshKhachHang();
+        }
+
+        public void RefreshKhachHang()
+        {
+            dsKhachHang = dbContext.KhachHangs.ToList();
+
+            cbxKhachHang.DataSource = dsKhachHang;
+            cbxKhachHang.DisplayMember = "TenKhachHang";
+            cbxKhachHang.ValueMember = "KhachHangID";
         }
 
         //Khai bao 1 nut mau
@@ -158,6 +192,6 @@ namespace LapTrinhTrenGiaoDien
             danhSachGheManHinh.Add(btnGhe);
             this.Controls.Add(btnGhe);
         }*/
-    
+
     }
 }
